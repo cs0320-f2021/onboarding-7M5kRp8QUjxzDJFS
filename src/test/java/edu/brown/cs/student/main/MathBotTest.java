@@ -30,31 +30,44 @@ public class MathBotTest {
   // TODO: add more unit tests of your own
 
   @Test
-  public void testZeros() {
+  public void testZerosAdd() {
     MathBot matherator9003 = new MathBot();
-    double output1 = matherator9003.add(5, 0);
-    double output2 = matherator9003.subtract(5, 0);
-    double output3 = matherator9003.subtract(0, 5);
-    assertEquals(5, output1, 0.01);
-    assertEquals(5, output2, 0.01);
-    assertEquals(-5, output3, 0.01);
+    double output = matherator9003.add(5, 0);
+    assertEquals(5, output, 0.01);
   }
 
   @Test
-  public void testDecimals() {
+  public void testZerosSub() {
     MathBot matherator9004 = new MathBot();
-    double output1 = matherator9004.add(0.26, 23.5);
-    double output2 = matherator9004.subtract(43.750, 3.6457);
-    assertEquals(23.76, output1, 0.01);
-    assertEquals(40.1043, output2, 0.01);
+    double output = matherator9004.subtract(0, 5);
+    assertEquals(-5, output, 0.01);
   }
 
   @Test
-  public void testNegatives() {
+  public void testDecimalsAdd() {
     MathBot matherator9005 = new MathBot();
-    double output1 = matherator9005.add(-5, -2);
-    double output2 = matherator9005.subtract(-6, -3);
-    assertEquals(-7, output1, 0.01);
-    assertEquals(-3, output2, 0.01);
+    double output = matherator9005.add(0.26, 23.5);
+    assertEquals(23.76, output, 0.01);
+  }
+
+  @Test
+  public void testDecimalsSub() {
+    MathBot matherator9006 = new MathBot();
+    double output = matherator9006.subtract(43.750, 3.6457);
+    assertEquals(40.1043, output, 0.01);
+  }
+
+  @Test
+  public void testNegativesAdd() {
+    MathBot matherator9007 = new MathBot();
+    double output = matherator9007.add(-5, -2);
+    assertEquals(-7, output, 0.01);
+  }
+
+  @Test
+  public void testNegativesSub() {
+    MathBot matherator9008 = new MathBot();
+    double output = matherator9008.subtract(-6, -3);
+    assertEquals(-3, output, 0.01);
   }
 }
