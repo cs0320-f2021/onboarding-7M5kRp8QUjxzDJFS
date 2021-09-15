@@ -1,5 +1,8 @@
 package edu.brown.cs.student.main;
 
+/**
+ * Given MathBot class.
+ */
 public class MathBot {
 
   /**
