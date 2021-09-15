@@ -67,7 +67,6 @@ public final class Main {
         try {
           input = input.trim();
           String[] arguments = input.split(" ");
-          // TODO: complete your REPL by adding commands for addition "add" and "subtract"
           String command = arguments[0];
           MathBot mbot = new MathBot();
           if (command.equals("add")) {
