@@ -2,7 +2,7 @@
 
 git filter-branch --env-filter '
 
-OLD_EMAIL="lmursalova803@gmail.com"
+OLD_EMAIL="77680564+lmursalova@users.noreply.github.com"
 CORRECT_NAME="7M5kRp8QUjxzDJFS"
 CORRECT_EMAIL="7M5kRp8QUjxzDJFS@gmail.com"
 
