@@ -72,11 +72,12 @@ public final class Main {
             double num1 = Double.parseDouble(arguments[1]);
             double num2 = Double.parseDouble(arguments[2]);
             System.out.println(mbot.add(num1, num2));
-          }
-          if (command.equals("subtract")) {
+          } else if (command.equals("subtract")) {
             double num1 = Double.parseDouble(arguments[1]);
             double num2 = Double.parseDouble(arguments[2]);
             System.out.println(mbot.subtract(num1, num2));
+          } else if (command.equals("stars")) {
+            StarData starData = new StarData(arguments[1]);
           }
         } catch (Exception e) {
           // e.printStackTrace();
