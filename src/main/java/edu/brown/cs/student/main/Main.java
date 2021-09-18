@@ -6,7 +6,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -44,6 +49,7 @@ public final class Main {
     this.args = args;
   }
 
+  @SuppressWarnings("checkstyle:AvoidNestedBlocks")
   private void run() {
     // set up parsing of command line flags
     OptionParser parser = new OptionParser();
@@ -62,22 +68,49 @@ public final class Main {
 
     try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
       String input;
+      StarData starData = new StarData("");
       while ((input = br.readLine()) != null) {
         try {
           input = input.trim();
-          String[] arguments = input.split(" ");
+          // regex expression found here: https://tinyurl.com/5xd7n29n
+          String[] arguments = input.split("\\s(?=(?:\"[^\"]*\"|[^\"])*$)");
           String command = arguments[0];
-          MathBot mbot = new MathBot();
-          if (command.equals("add")) {
-            double num1 = Double.parseDouble(arguments[1]);
-            double num2 = Double.parseDouble(arguments[2]);
-            System.out.println(mbot.add(num1, num2));
-          } else if (command.equals("subtract")) {
-            double num1 = Double.parseDouble(arguments[1]);
-            double num2 = Double.parseDouble(arguments[2]);
-            System.out.println(mbot.subtract(num1, num2));
-          } else if (command.equals("stars")) {
-            StarData starData = new StarData(arguments[1]);
+          switch (command) {
+            case "add": {
+              this.addHelper(arguments[1], arguments[2]);
+              break;
+            }
+            case "subtract": {
+              this.subHelper(arguments[1], arguments[2]);
+              break;
+            }
+            case "stars":
+              starData = new StarData(arguments[1]);
+              break;
+            case "naive_neighbors":
+              if (starData.getStars().size() == 0) {
+                System.out.println("There are no stars available. "
+                    + "Make sure to run the stars command with a file containing star data.");
+              } else if (arguments.length == 5) {
+                List<Star> neighbors = starData.getPositionNeighbors(Integer.parseInt(arguments[1]),
+                    Double.parseDouble(arguments[2]), Double.parseDouble(arguments[3]),
+                    Double.parseDouble(arguments[4]));
+                for (Star s : neighbors) {
+                  System.out.println(s.getName());
+                }
+              } else if (arguments.length == 3) {
+                List<Star> neighbors = starData.getStarNeighbors(Integer.parseInt(arguments[1]),
+                    arguments[2]);
+                for (Star s : neighbors) {
+                  System.out.println(s.getName());
+                }
+              } else {
+                System.out.println("Error: The arguments you provided were incorrect.");
+              }
+              break;
+            default:
+              System.out.println(input);
+              break;
           }
         } catch (Exception e) {
           // e.printStackTrace();
@@ -159,4 +192,29 @@ public final class Main {
       return new ModelAndView(variables, "main.ftl");
     }
   }
+
+  /**
+   * A method that adds two given numbers together.
+   * @param number1 - The first number given.
+   * @param number2 - The second number given.
+   */
+  private void addHelper(String number1, String number2) {
+    MathBot mbot = new MathBot();
+    double num1 = Double.parseDouble(number1);
+    double num2 = Double.parseDouble(number2);
+    System.out.println(mbot.add(num1, num2));
+  }
+
+  /**
+   * A method that subtracts two given numbers.
+   * @param number1 - The first number given.
+   * @param number2 - The second number given.
+   */
+  private void subHelper(String number1, String number2) {
+    MathBot mbot = new MathBot();
+    double num1 = Double.parseDouble(number1);
+    double num2 = Double.parseDouble(number2);
+    System.out.println(mbot.subtract(num1, num2));
+  }
+
 }
