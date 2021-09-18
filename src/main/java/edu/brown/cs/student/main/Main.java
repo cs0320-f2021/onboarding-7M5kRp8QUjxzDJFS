@@ -6,12 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -76,14 +72,10 @@ public final class Main {
           String[] arguments = input.split("\\s(?=(?:\"[^\"]*\"|[^\"])*$)");
           String command = arguments[0];
           switch (command) {
-            case "add": {
-              this.addHelper(arguments[1], arguments[2]);
+            case "add": this.addHelper(arguments[1], arguments[2]);
               break;
-            }
-            case "subtract": {
-              this.subHelper(arguments[1], arguments[2]);
+            case "subtract": this.subHelper(arguments[1], arguments[2]);
               break;
-            }
             case "stars":
               starData = new StarData(arguments[1]);
               break;

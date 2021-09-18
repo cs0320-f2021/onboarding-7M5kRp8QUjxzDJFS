@@ -115,6 +115,7 @@ public class StarData {
     for (Map.Entry<Star, Double> star : distances.entrySet()) {
       if (star.getValue() < min) {
         nearestStar = star.getKey();
+        min = star.getValue();
       }
     }
     return nearestStar;
