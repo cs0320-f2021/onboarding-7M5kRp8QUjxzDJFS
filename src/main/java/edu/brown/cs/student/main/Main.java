@@ -93,11 +93,15 @@ public final class Main {
               } else if (arguments.length == 3) {
                 List<Star> neighbors = starData.getStarNeighbors(Integer.parseInt(arguments[1]),
                     arguments[2]);
-                for (Star s : neighbors) {
-                  System.out.println(s.getID());
+                if (neighbors.size() == 0) {
+                  System.out.println("There are no neighboring stars.");
+                } else {
+                  for (Star s : neighbors) {
+                    System.out.println(s.getID());
+                  }
                 }
               } else {
-                System.out.println("Error: The arguments you provided were incorrect.");
+                System.out.println("ERROR: The arguments you provided were incorrect.");
               }
               break;
             default:

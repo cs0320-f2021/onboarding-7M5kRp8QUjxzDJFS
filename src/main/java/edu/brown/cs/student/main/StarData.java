@@ -1,12 +1,17 @@
 package edu.brown.cs.student.main;
 
+import java.awt.DisplayMode;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalInt;
+import java.util.Random;
+import java.util.stream.IntStream;
 
 /**
  * This class stores star data and finds neighbors.
@@ -96,21 +101,48 @@ public class StarData {
       distances.put(curStar, dist);
     }
     int howManyStars = Math.min(k, distances.size());
-    for (int i = 1; i <= howManyStars; i++) {
-      Star curSmallest = this.findSmallest(distances);
-      neighbors.add(curSmallest);
-      distances.remove(curSmallest);
+    int i = 1;
+    while (i <= howManyStars) {
+      List<Star> curSmallest = this.findSmallest(distances);
+      if (neighbors.size() + curSmallest.size() <= howManyStars) {
+        neighbors.addAll(curSmallest);
+        for (Star s : curSmallest) {
+          distances.remove(s);
+        }
+        i += curSmallest.size();
+      } else {
+        int left = howManyStars - i;
+        List<Star> selectedTies = this.selectTies(curSmallest, left);
+        neighbors.addAll(selectedTies);
+        i += selectedTies.size();
+      }
     }
     return neighbors;
   }
 
   /**
-   * A method that finds the nearest star in the given hashmap.
-   * @param distances - A hashmap of stars to their distance from the given point.
-   * @return - The current nearest neighbor star.
+   * A method that randomly selects which tied stars go into the result.
+   * @param ties - The stars equidistant from the target.
+   * @param count - How many stars to return.
+   * @return - The randomly selected stars.
    */
-  private Star findSmallest(HashMap<Star, Double> distances) {
+  private List<Star> selectTies(List<Star> ties, int count) {
+    List<Star> selected = new ArrayList<>();
+    for (int i = 0; i <= count; i++) {
+      int ind = new Random().nextInt(ties.size());
+      selected.add(ties.get(ind));
+    }
+    return selected;
+  }
+
+  /**
+   * A method that finds the nearest star(s) in the given hashmap.
+   * @param distances - A hashmap of stars to their distance from the given point.
+   * @return - The current nearest neighbor star(s).
+   */
+  private List<Star> findSmallest(HashMap<Star, Double> distances) {
     Star nearestStar = new Star(-1, "temp", 0.0, 0.0, 0.0);
+    List<Star> nearestStars = new ArrayList<>();
     double min = Double.POSITIVE_INFINITY;
     for (Map.Entry<Star, Double> star : distances.entrySet()) {
       if (star.getValue() < min) {
@@ -118,7 +150,27 @@ public class StarData {
         min = star.getValue();
       }
     }
-    return nearestStar;
+    nearestStars.add(nearestStar);
+    distances.remove(nearestStar);
+    List<Star> ties = this.checkTies(distances, min);
+    nearestStars.addAll(ties);
+    return nearestStars;
+  }
+
+  /**
+   * A method that checks and returns any ties to the current nearest neighbor.
+   * @param distances - A hashmap of stars and their distance to the target.
+   * @param minimum - The current minimum distance.
+   * @return - A list of stars equidistant to the target.
+   */
+  private List<Star> checkTies(HashMap<Star, Double> distances, double minimum) {
+    List<Star> ties = new ArrayList<>();
+    for (Map.Entry<Star, Double> star : distances.entrySet()) {
+      if (star.getValue().equals(minimum)) {
+        ties.add(star.getKey());
+      }
+    }
+    return ties;
   }
 
   /**
@@ -133,7 +185,7 @@ public class StarData {
     try {
       List<String> names = this.getNames();
       if (!names.contains(name)) {
-        throw new IOException("Error: The given star is not in the star data.");
+        throw new IOException("ERROR: The given star is not in the star data.");
       } else {
         int ind = names.indexOf(name);
         Star startStar = this.stars.get(ind);
