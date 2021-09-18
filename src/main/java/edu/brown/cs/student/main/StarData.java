@@ -138,11 +138,12 @@ public class StarData {
         int ind = names.indexOf(name);
         Star startStar = this.stars.get(ind);
         Double[] position = startStar.getPosition();
-        neighbors = this.getPositionNeighbors(k, position[0], position[1], position[2]);
+        neighbors = this.getPositionNeighbors(k + 1, position[0], position[1], position[2]);
       }
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
+    neighbors.remove(0);
     return neighbors;
   }
 

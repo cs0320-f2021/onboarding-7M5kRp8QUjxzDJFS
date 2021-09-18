@@ -35,8 +35,10 @@ public class Star {
    * @return - The distance.
    */
   public Double getDistance(Double xCoord, Double yCoord, Double zCoord) {
-    return Math.sqrt(Math.pow(this.x - xCoord, 2) + Math.pow(this.y - yCoord, 2)
-        + Math.pow(this.z - zCoord, 2));
+    double xVal = Math.pow((this.x - xCoord), 2);
+    double yVal = Math.pow((this.y - yCoord), 2);
+    double zVal = Math.pow((this.z - zCoord), 2);
+    return Math.sqrt(xVal + yVal + zVal);
   }
 
   /**
@@ -66,5 +68,17 @@ public class Star {
   @Override
   public String toString() {
     return "Star{" + "id= " + id + "name='" + name + '\'' + '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == this) {
+      return true;
+    }
+    if (!(o instanceof Star)) {
+      return false;
+    }
+    Star s = (Star) o;
+    return (s.getID() == this.id && s.getName().equals(this.name));
   }
 }
