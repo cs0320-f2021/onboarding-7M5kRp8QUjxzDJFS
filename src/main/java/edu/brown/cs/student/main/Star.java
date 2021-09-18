@@ -55,6 +55,14 @@ public class Star {
     return this.name;
   }
 
+  /**
+   * Gets the id of the star.
+   * @return - The star's id.
+   */
+  public int getID() {
+    return id;
+  }
+
   @Override
   public String toString() {
     return "Star{" + "id= " + id + "name='" + name + '\'' + '}';

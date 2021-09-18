@@ -88,13 +88,13 @@ public final class Main {
                     Double.parseDouble(arguments[2]), Double.parseDouble(arguments[3]),
                     Double.parseDouble(arguments[4]));
                 for (Star s : neighbors) {
-                  System.out.println(s.getName());
+                  System.out.println(s.getID());
                 }
               } else if (arguments.length == 3) {
                 List<Star> neighbors = starData.getStarNeighbors(Integer.parseInt(arguments[1]),
                     arguments[2]);
                 for (Star s : neighbors) {
-                  System.out.println(s.getName());
+                  System.out.println(s.getID());
                 }
               } else {
                 System.out.println("Error: The arguments you provided were incorrect.");
