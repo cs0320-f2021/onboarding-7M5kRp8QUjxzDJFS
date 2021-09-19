@@ -1,17 +1,13 @@
 package edu.brown.cs.student.main;
 
-import java.awt.DisplayMode;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.OptionalInt;
 import java.util.Random;
-import java.util.stream.IntStream;
 
 /**
  * This class stores star data and finds neighbors.
@@ -42,16 +38,14 @@ public class StarData {
     int starCount = 0;
     try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
       String line = br.readLine();
-      if (!this.checkHeader(line)) {
+      if (line == null || !this.checkHeader(line)) {
         throw new IOException("Error: The header of the given file does not have the"
             + "correct columns.");
       } else {
         while (line != null) {
           try {
             String[] data = line.split(",");
-            if (data[0].equals("StarID")) {
-              line = br.readLine();
-            } else {
+            if (!data[0].equals("StarID")) {
               int id = Integer.parseInt(data[0]);
               Double x = Double.parseDouble(data[2]);
               Double y = Double.parseDouble(data[3]);
@@ -59,9 +53,9 @@ public class StarData {
               Star star = new Star(id, data[1], x, y, z);
               starCount += 1;
               output.add(star);
-              line = br.readLine();
             }
-          } catch (Exception e) {
+            line = br.readLine();
+          } catch (IOException e) {
             System.out.println("Error: Something went wrong processing your input.");
             System.out.println(e.getMessage());
           }
@@ -70,7 +64,7 @@ public class StarData {
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
-    System.out.println("Read " + starCount + " star(s) from " + filename);
+    System.out.println("Read " + starCount + " star from " + filename);
     return output;
   }
 
@@ -81,8 +75,8 @@ public class StarData {
    */
   private boolean checkHeader(String header) {
     String[] data = header.split(",");
-    return (data[0].equals("StarID") && data[1].equals("ProperName") && data[2].equals("X")
-        && data[3].equals("Y") && data[4].equals("Z")) || (data.length != 5);
+    return data[0].equals("StarID") && data[1].equals("ProperName") && data[2].equals("X")
+        && data[3].equals("Y") && data[4].equals("Z") || (data.length != 5);
   }
 
   /**
@@ -96,26 +90,33 @@ public class StarData {
   public List<Star> getPositionNeighbors(int k, Double x, Double y, Double z) {
     HashMap<Star, Double> distances = new HashMap<>();
     List<Star> neighbors = new ArrayList<>();
-    for (Star curStar : stars) {
-      Double dist = curStar.getDistance(x, y, z);
-      distances.put(curStar, dist);
-    }
-    int howManyStars = Math.min(k, distances.size());
-    int i = 1;
-    while (i <= howManyStars) {
-      List<Star> curSmallest = this.findSmallest(distances);
-      if (neighbors.size() + curSmallest.size() <= howManyStars) {
-        neighbors.addAll(curSmallest);
-        for (Star s : curSmallest) {
-          distances.remove(s);
-        }
-        i += curSmallest.size();
-      } else {
-        int left = howManyStars - i;
-        List<Star> selectedTies = this.selectTies(curSmallest, left);
-        neighbors.addAll(selectedTies);
-        i += selectedTies.size();
+    try {
+      if (k < 0) {
+        throw new IOException("ERROR: k cannot be less than 0.");
       }
+      for (Star curStar : stars) {
+        Double dist = curStar.getDistance(x, y, z);
+        distances.put(curStar, dist);
+      }
+      int howManyStars = Math.min(k, distances.size());
+      int i = 1;
+      while (i <= howManyStars) {
+        List<Star> curSmallest = this.findSmallest(distances);
+        if (neighbors.size() + curSmallest.size() <= howManyStars) {
+          neighbors.addAll(curSmallest);
+          for (Star s : curSmallest) {
+            distances.remove(s);
+          }
+          i += curSmallest.size();
+        } else {
+          int left = howManyStars - i;
+          List<Star> selectedTies = this.selectTies(curSmallest, left);
+          neighbors.addAll(selectedTies);
+          i += selectedTies.size();
+        }
+      }
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
     }
     return neighbors;
   }

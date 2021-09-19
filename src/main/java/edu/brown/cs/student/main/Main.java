@@ -73,9 +73,9 @@ public final class Main {
           String command = arguments[0];
           switch (command) {
             case "add": this.addHelper(arguments[1], arguments[2]);
-              break;
+            break;
             case "subtract": this.subHelper(arguments[1], arguments[2]);
-              break;
+            break;
             case "stars":
               starData = new StarData(arguments[1]);
               break;
@@ -93,20 +93,15 @@ public final class Main {
               } else if (arguments.length == 3) {
                 List<Star> neighbors = starData.getStarNeighbors(Integer.parseInt(arguments[1]),
                     arguments[2]);
-                if (neighbors.size() == 0) {
-                  System.out.println("There are no neighboring stars.");
-                } else {
-                  for (Star s : neighbors) {
-                    System.out.println(s.getID());
-                  }
+                for (Star s : neighbors) {
+                  System.out.println(s.getID());
                 }
               } else {
-                System.out.println("ERROR: The arguments you provided were incorrect.");
+                throw new IOException("ERROR: The arguments you provided were incorrect.");
               }
               break;
             default:
-              System.out.println(input);
-              break;
+              throw new IOException("ERROR: There is no command to process.");
           }
         } catch (Exception e) {
           // e.printStackTrace();

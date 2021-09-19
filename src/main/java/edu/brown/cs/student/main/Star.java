@@ -35,9 +35,9 @@ public class Star {
    * @return - The distance.
    */
   public Double getDistance(Double xCoord, Double yCoord, Double zCoord) {
-    double xVal = Math.pow((this.x - xCoord), 2);
-    double yVal = Math.pow((this.y - yCoord), 2);
-    double zVal = Math.pow((this.z - zCoord), 2);
+    double xVal = Math.pow(this.x - xCoord, 2);
+    double yVal = Math.pow(this.y - yCoord, 2);
+    double zVal = Math.pow(this.z - zCoord, 2);
     return Math.sqrt(xVal + yVal + zVal);
   }
 
@@ -65,11 +65,20 @@ public class Star {
     return id;
   }
 
+  /**
+   * An override of the toString method for Stars.
+   * @return - A string representation of a star.
+   */
   @Override
   public String toString() {
-    return "Star{" + "id= " + id + "name='" + name + '\'' + '}';
+    return "Star{" + "id= " + id + " name='" + name + '\'' + '}';
   }
 
+  /**
+   * An override of the equals method for Stars.
+   * @param o - The object being compared.
+   * @return - True if all fields are equal, else false.
+   */
   @Override
   public boolean equals(Object o) {
     if (o == this) {
@@ -79,6 +88,17 @@ public class Star {
       return false;
     }
     Star s = (Star) o;
-    return (s.getID() == this.id && s.getName().equals(this.name));
+    Double[] positionOther = s.getPosition();
+    return s.getID() == this.id && s.getName().equals(this.name) && this.x.equals(positionOther[0])
+        && this.y.equals(positionOther[1]) && this.z.equals(positionOther[2]);
+  }
+
+  /**
+   * An override of the hashCode method for Stars.
+   * @return - The hashCode for a given star.
+   */
+  @Override
+  public int hashCode() {
+    return this.id + this.name.hashCode();
   }
 }
